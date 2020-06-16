@@ -1,0 +1,150 @@
+create database hospital ;
+use hospital;
+create table Doctors (
+d_ID int primary key ,
+d_Name varchar(255) ,
+d_address varchar(255) ,
+d_phone int
+);
+create table Appointment (
+a_ID int primary key , 
+a_date int ,
+a_time int ,
+a_duration int ,
+a_reason varchar(255) ,
+d_ID int foreign key references Doctors (d_ID)
+);
+create table Patient (
+p_ID int primary key , 
+p_name varchar(255) ,
+p_phone int ,
+p_adress varchar(255),
+a_ID int foreign key references Appointment (a_ID)
+);
+create table Payment (
+pa_ID int primary key , 
+pa_receiptnum int ,
+pa_date int ,
+pa_method nvarchar(255),
+p_amount decimal,
+p_ID int foreign key references patient (p_ID)
+);
+use hospital ;
+insert into Doctors
+values (1 , 'mohamed' , 'alex.' , 1111);
+insert into Appointment (a_ID , a_date , a_time , a_duration ,a_reason)
+values (2 , 15/6/2020 , 10 , 8 ,'cough');
+insert into Patient (p_ID , p_Name , p_phone , p_adress)
+values (3 , 'Ahmed' , 555 , 'alex');
+insert into Payment (pa_receiptnum , pa_date ,pa_method , p_amount)
+values (4 , 2 , 15/6/2020 , 'cash' , 50);
+insert into Payment (pa_receiptnum , pa_date ,pa_method , p_amount)
+values (8 , 5 , 5/5/2010 , 'vesa' , 70);
+insert into Doctors
+values (6, 'Ali' , 'cairo.' , 1151);
+insert into Appointment (a_ID , a_date , a_time , a_duration ,a_reason)
+values (7 , 5/6/2020 , 3 , 8,'headache');
+insert into Patient (p_ID , p_Name , p_phone , p_adress)
+values (8, 'Fares' , 234 , 'Tanta');
+insert into Payment (pa_ID , pa_receiptnum , pa_date ,pa_method , p_amount)
+values (9 , 1 , 5/6/2020 , 'visa' , 100);
+delete from Doctors where d_ID = 6 ;
+delete from Appointment where a_reason = 'headache' ;
+delete from patient where p_phone = 234 ;
+delete from Payment where p_amount = 100 ;
+delete from Payment where p_ID = 5 ;
+update Doctors
+set d_address = 'cairo'
+where d_ID = 1 ;
+update Appointment
+set a_time = 2
+where a_time = 10 ;
+update patient
+set p_Name = 'Moaz'
+where p_Name = 'Ahmed' ;
+update payment
+set pa_receiptnum = 3
+where pa_receiptnum = 2 ;
+update payment
+set pa_receiptnum = 5
+where pa_receiptnum = 8 ;
+select P_name , a_date 
+from patient
+inner join Appointment on patient.a_ID = Appointment.a_ID ; 
+select d_address , a_reason
+from Doctors
+left join Appointment on Doctors.d_ID = Appointment.d_ID ;
+select d_address , a_reason
+from Doctors
+right join Appointment on Doctors.d_ID = Appointment.d_ID ;
+select d_address , a_reason 
+from Doctors
+full join  Appointment on Doctors.d_ID = Appointment.d_ID ;
+select d_address , a_reason 
+from Appointment, Doctors
+where Doctors.d_ID = Appointment.d_ID ;
+select count(a_ID) , a_date
+from Appointment
+group by a_date ; 
+select count(p_phone) , p_Name
+from Patient 
+group by p_Name ; 
+select p_amount
+from payment
+where pa_ID = (select pa_ID from Payment where pa_ID = 2) ;  
+select p_Name , p_phone
+from patient
+where p_adress > (select count(a_ID) from Appointment ) ; 
+select p_adress 
+from patient
+where p_adress = (select d_address from Doctors where d_address = 'cairo') ; 
+select p_phone
+from patient ;
+select * 
+from Doctors ;
+select distinct d_Name
+from Doctors ;
+SELECT TOP 10 * 
+FROM Doctors ;
+SELECT TOP 10 PERCENT p_Name 
+FROM patient; 
+SELECT a_ID 
+FROM Appointment
+ORDER BY a_date;
+SELECT a_ID 
+FROM Appointment
+ORDER BY a_time desc ;
+SELECT  p_amount
+FROM payment
+ORDER BY pa_date ASC;
+SELECT MIN(p_amount)
+FROM Payment ;
+select MAX(p_amount)
+FROM Payment ;
+SELECT AVG(p_amount)
+FROM Payment ;
+SELECT SUM(p_amount)
+FROM Payment ;
+SELECT *
+FROM Appointment
+WHERE a_ID = 1 ;
+SELECT d_Name
+FROM Doctors
+WHERE d_Name LIKE '%n%';
+SELECT d_Name
+FROM Doctors
+WHERE d_Name IN ('Ali', 'Alia');
+SELECT d_Name AS staffName
+FROM Doctors;
+SELECT p_name
+FROM Patient
+WHERE p_ID BETWEEN 50 AND 80;
+SELECT p_phone , p_adress
+FROM patient
+WHERE p_Name IN ('Fares', 'omar') AND p_Name LIKE '%n%' ;
+SELECT d_phone , d_address
+FROM Doctors
+WHERE d_Name IN ('nadil', 'nadr') or d_Name LIKE '%n%' ;
+SELECT p_amount
+FROM Payment
+WHERE NOT p_amount = 100; 
